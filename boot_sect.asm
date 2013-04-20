@@ -2,6 +2,10 @@
 ; A simple boot sector that prints a message to the screen using a BIOS routine.
 ;
 
+[org 0x7c00]          ; Tells the asembler where it expects to be placed in memory
+                      ; probably just is more of a way to give an offset of for the labels when referenced
+
+
 mov ah, 0x0e          ;int 10/ah = 0eh -> scrolling teletype BIOS routine
 
 ; First attempt

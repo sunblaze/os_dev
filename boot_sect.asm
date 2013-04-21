@@ -2,34 +2,29 @@
 ; A simple boot sector that prints a message to the screen using a BIOS routine.
 ;
 
-[org 0x7c00]          ; Tells the asembler where it expects to be placed in memory
-                      ; probably just is more of a way to give an offset of for the labels when referenced
-
-
 mov ah, 0x0e          ;int 10/ah = 0eh -> scrolling teletype BIOS routine
 
-; First attempt
-mov al, the_secret
-int 0x10              ; Does this print an X?
+mov bp, 0x8000        ; Set the base of the stack a little above where BIOS
+mov sp, bp            ; loads our boot sector - so it won't overwrite us.
 
-; Second attempt
-mov al, [the_secret]
-int 0x10              ; Does this print an X?
+push 'A'              ; Push some characters on the stack for later
+push 'B'              ; retreival. Note, these are push on as
+push 'C'              ; 16-bit values, so the most significant byte
+                      ; will be added by our assembler as 0x00
 
-; Third attempt
-mov bx, the_secret
-add bx, 0x7c00
-mov al, [bx]
-int 0x10              ; Does this print an X?
+pop bx                ; Note, we can only pop 16-bits, so pop to bx
+mov al, bl            ; then copy bl (ie. 8-bit char) to al
+int 0x10              ; print(al)
 
-; Fourth attempt
-mov al, [0x7c1d]
-int 0x10              ; Does this print an X?
+pop bx                ; Pop the next value
+mov al, bl
+int 0x10              ; print(al)
+
+mov al, [0x7ffe]      ; To prove our stack grows downwards from bp,
+                      ; fetch the char at 0x8000 - 2 (ie. 16-bits)
+int 0x10              ; print(al)
 
 jmp $                 ; Jump forever.
-
-the_secret:
-  db "X"
 
 ;
 ; Padding and magic BIOS number.

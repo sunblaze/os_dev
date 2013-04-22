@@ -24,7 +24,7 @@ print_hex:
   mov [bx], cl                    ; put calculated character into HEX_OUT global variable
 
   shr dx, 4
-  sub ax, 1
+  dec ax
   cmp ax, 1
   jne begin_hex_fillout
 

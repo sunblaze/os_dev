@@ -6,6 +6,9 @@
 mov [BOOT_DRIVE], dl  ; BIOS stores our boot drive in DL, so it's
                       ; best to remember this for later.
 
+mov bx, 0             ; Initialize DS register, doesn't work on VMWare otherwise
+mov ds, bx            ;TODO Initialize the rest of the registers
+
 mov bp, 0x8000        ; Here we set our stack safely out of the 
 mov sp, bp            ; way, at 0x8000
 

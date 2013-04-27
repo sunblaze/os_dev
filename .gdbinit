@@ -7,8 +7,8 @@ target remote localhost:1234
 
 echo **** James' command reference ****\n
 echo br *0x7c00     ; Sets a breakpoint at the first command in the bootsector\n
-echo c              ; Continue
+echo c              ; Continue\n
 echo x/i $eip       ; Shows next instruction\n
 echo si             ; Steps to next instruction\n
-echo info registers ; Shows all registers and their values
+echo info registers ; Shows all registers and their values\n
 echo **** Done ****\n

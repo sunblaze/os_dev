@@ -1,2 +1,2 @@
 #/sbin/bash
-qemu-system-x86_64 boot_sect.img
+qemu-system-x86_64 -fda boot_sect.img -boot a

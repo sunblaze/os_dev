@@ -1,17 +1,21 @@
 ;
 ; Read some sectors from the boot disk using our disk_read function
 ;
+; Setup Code
 [org 0x7c00]          ; Tell the assembler where this code will be loaded
+
+mov ax, 0             ; Zeros out the ax register, I could use "xor ax, ax" but I don't want to optimize if it makes the command more obscure to understand
+mov ds, ax            ; ds register can only be set with the value in another register. ds has to be initialized to zero because there is no guarantee
+                      ; it's cleared on boot. And we want our mov [BOOT_DRIVE] and all other [x] calls to direct to the correct segment
+mov ss, ax            ; ss register also has to be cleared like the ds register, so our stack position gets set to the correct location (0x8000)
 
 mov [BOOT_DRIVE], dl  ; BIOS stores our boot drive in DL, so it's
                       ; best to remember this for later.
 
-mov bx, 0             ; Initialize DS register, doesn't work on VMWare otherwise
-mov ds, bx            ;TODO Initialize the rest of the registers
-
 mov bp, 0x8000        ; Here we set our stack safely out of the 
 mov sp, bp            ; way, at 0x8000
 
+; Main Code
 mov bx, 0x9000        ; Load 2 sectors to 0x0000(ES):0x9000(BX)
 mov dh, 2             ; from the boot disk.
 mov dl, [BOOT_DRIVE]
